@@ -1,4 +1,4 @@
-package com.springboot.jpa.data.dto;
+package com.springboot.jpagradle.data.dto;
 
 public class ProductResponseDto {
     private Long number;
@@ -48,4 +48,6 @@ public class ProductResponseDto {
     public void setStock(int stock) {
         this.stock = stock;
     }
+
+
 }

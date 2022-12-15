@@ -1,4 +1,4 @@
-package com.springboot.jpa.data.dto;
+package com.springboot.jpagradle.data.dto;
 
 public class ChangeProductNameDto {
     private Long number;

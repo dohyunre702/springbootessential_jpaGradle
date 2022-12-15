@@ -1,11 +1,10 @@
-package com.springboot.jpa.controller;
+package com.springboot.jpagradle.controller;
 
 
-import com.springboot.jpa.data.dto.ChangeProductNameDto;
-import com.springboot.jpa.data.dto.ProductDto;
-import com.springboot.jpa.data.dto.ProductResponseDto;
-import com.springboot.jpa.data.entity.Product;
-import com.springboot.jpa.service.ProductService;
+import com.springboot.jpagradle.data.dto.ChangeProductNameDto;
+import com.springboot.jpagradle.data.dto.ProductDto;
+import com.springboot.jpagradle.data.dto.ProductResponseDto;
+import com.springboot.jpagradle.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,6 @@ public class ProductController {
         this.productService = productService;
     }
 
-    //get
     @GetMapping()
     public ResponseEntity<ProductResponseDto> getProduct(Long number) {
         ProductResponseDto productResponseDto = productService.getProduct(number);

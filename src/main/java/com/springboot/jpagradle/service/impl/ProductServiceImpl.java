@@ -1,27 +1,34 @@
-package com.springboot.jpa.service.impl;
+package com.springboot.jpagradle.service.impl;
 
-import com.springboot.jpa.data.dao.ProductDAO;
-import com.springboot.jpa.data.dto.ProductDto;
-import com.springboot.jpa.data.dto.ProductResponseDto;
-import com.springboot.jpa.data.entity.Product;
-import com.springboot.jpa.service.ProductService;
+import com.springboot.jpagradle.entity.Product;
+import com.springboot.jpagradle.repository.ProductRepository;
+import com.springboot.jpagradle.service.ProductService;
+import com.springboot.jpagradle.data.dto.ProductDto;
+import com.springboot.jpagradle.data.dto.ProductResponseDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
 //ProductService 인터페이스의 구현체
+@Service
 public class ProductServiceImpl implements ProductService {
-    private final ProductDAO productDAO;
+    private final Logger LOGGER = LoggerFactory.getLogger(ProductServiceImpl.class);
+    private final ProductRepository productRepository;
 
-    @Autowired //dto 객체를 생성하고 값을 넣어 초기화 > builder패턴 활용 가능
-    public ProductServiceImpl(ProductDAO productDAO) {
-        this.productDAO = productDAO;
+    @Autowired
+    public ProductServiceImpl(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
     @Override //조회하기
     public ProductResponseDto getProduct(Long number) {
-        Product product = productDAO.selectProduct(number);
+        LOGGER.info("[getProduct] input number : {}", number);
+        Product product = productRepository.findById(number).get();
 
+        LOGGER.info("[getProduct] product number : {}, name : {}", product.getNumber(), product.getName());
         ProductResponseDto productResponseDto = new ProductResponseDto();
         productResponseDto.setNumber(product.getNumber());
         productResponseDto.setName(product.getName());
@@ -32,9 +39,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    //저장하기: 전달받은 DTO객체를 통해 엔티티 객체 생성해 초기화한 후, DAO 객체로 전달
-    //상품 정보ㅡㄹ 전달하고 애플리케이션을 거쳐 DB에 저장하는 역할 수행
     public ProductResponseDto saveProduct(ProductDto productDto) {
+        LOGGER.info("[saveProduct] productDTO : {}", productDto.toString());
         //엔티티 객체 생성해 초기화한다.
         Product product = new Product();
         product.setName(productDto.getName());
@@ -43,8 +49,8 @@ public class ProductServiceImpl implements ProductService {
         product.setCreatedAt(LocalDateTime.now());
         product.setUpdatedAt(LocalDateTime.now());
 
-        //DAO객체로 전달한다.
-        Product savedProduct = productDAO.insertProduct(product);
+        Product savedProduct = productRepository.save(product);
+        LOGGER.info("[saveProduct] productDTO : {}", savedProduct);
 
         ProductResponseDto productResponseDto = new ProductResponseDto();
         productResponseDto.setNumber(savedProduct.getNumber());
@@ -57,9 +63,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override //업데이트 - 상품정보 중 이름을 변경
     public ProductResponseDto changeProductName(Long number, String name) throws Exception {
-        //클라이언트로부터 대상을 식별할 수 있는 인덱스 값과 변경하려는 이름을 받아온다.
-        //실제 변경 작업은 dao에서 진행 > 서비스 레이어에서는 메서드를 호출한 결과값만 받아 옴.
-        Product changedProduct = productDAO.updateProductName(number, name);
+        Product foundProduct = productRepository.findById(number).get();
+        foundProduct.setName(name);
+        Product changedProduct = productRepository.save(foundProduct);
 
         ProductResponseDto productResponseDto = new ProductResponseDto();
         productResponseDto.setNumber(changedProduct.getNumber());
@@ -72,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override //삭제
     public void deleteProduct(Long number) throws Exception {
-        productDAO.deleteProduct(number);
+        productRepository.deleteById(number);
 
     };
 

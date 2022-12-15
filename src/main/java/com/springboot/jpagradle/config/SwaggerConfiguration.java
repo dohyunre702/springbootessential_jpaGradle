@@ -1,4 +1,4 @@
-package com.springboot.jpa.config;
+package com.springboot.jpagradle.config;
 
 
 import org.springframework.context.annotation.Bean;
@@ -18,18 +18,20 @@ public class SwaggerConfiguration {
     @Bean
     public Docket api() {
             return new Docket(DocumentationType.SWAGGER_2)
-                    .apiInfo(apiInfo())
+                    .useDefaultResponseMessages(false)
+                    .apiInfo(getApiInfo())
                     .select()
-                    .apis(RequestHandlerSelectors.basePackage("com.springboot.jpa")) //스캔할 패키지 범위 설정
+                    .apis(RequestHandlerSelectors.basePackage("com.springboot.jpagradle")) //스캔할 패키지 범위 설정
                     .paths(PathSelectors.any())
                     .build();
         }
-    private ApiInfo apiInfo() {
+
+    //return될 api정보를 담은 것
+    private ApiInfo getApiInfo() {
             return new ApiInfoBuilder()
                     .title("String Boot Open API Test with Swagger")
                     .description("설명 부분")
                     .version("1.0.0")
                     .build();
         }
-
     }

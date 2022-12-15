@@ -19,11 +19,15 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.2'
+    implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.2'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'com.google.code.gson:gson:2.8.9'
 }
 
 tasks.named('test') {

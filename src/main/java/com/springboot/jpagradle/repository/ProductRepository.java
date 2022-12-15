@@ -1,6 +1,7 @@
-package com.springboot.jpa.data.repository;
+package com.springboot.jpagradle.repository;
 
-import com.springboot.jpa.data.entity.Product;
+
+import com.springboot.jpagradle.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 //JPA리포지토리 = Spring Data Jpa가 제공하는 인터페이스
